@@ -27,6 +27,10 @@ const T& vector<T>::at(const size_t index) const
     return m_arr[index];
 }
 
+
+// Overloaded operators
+
+
 template <typename T>
 const T& vector<T>::operator[](const size_t index) const
 {
@@ -53,6 +57,25 @@ vector<T>& vector<T>::operator=(const vector<T>& other)
 
     return *this;
 }
+
+
+
+template <typename T>
+vector<T>& vector<T>::operator+=(const vector<T> other)
+{
+    this->reserve(this->m_size + other.m_size);
+
+    for(int i = 0; i < other.m_size; i++)
+    {
+        m_arr[m_size + i] = other.at(i);
+    }
+
+    m_size += other.m_size;
+    
+    return *this;
+}
+
+
 
 
 
@@ -126,6 +149,7 @@ T& vector<T>::back() const
 
 
 
+
 template <typename T>
 typename vector<T>::iterator vector<T>::begin()
 {
@@ -138,6 +162,18 @@ typename vector<T>::iterator vector<T>::end()
     return vector<T>::iterator(m_arr + m_size);
 }
 
+template <typename T>
+typename vector<T>::const_iterator vector<T>::cbegin() const
+{
+    return vector<T>::const_iterator(m_arr);
+}
+
+template <typename T>
+typename vector<T>::const_iterator vector<T>::cend() const
+{
+    return vector<T>::const_iterator(m_arr + m_size);
+}
+
 
 
 template <typename T>
@@ -145,11 +181,24 @@ vector<T>::iterator::iterator(T* ptr) : m_ptr{ptr} {};
 
 
 
-// template <typename T>
-// std::ostream& operator<< (std::ostream& os, const typename vector<T>::iterator it)
-// {
-//     return (os << it.m_elem);
-// }
+template <typename T>
+T& vector<T>::iterator::operator*() const
+{
+    return *m_ptr;
+}
+
+template <typename T>
+bool vector<T>::iterator::operator==(const vector<T>::iterator& other) const
+{
+    return (this->m_ptr == other.m_ptr);
+}
+
+template <typename T>
+bool vector<T>::iterator::operator!=(const vector<T>::iterator& other) const
+{
+    return (this->m_ptr != other.m_ptr);
+}
+
 
 
 template <typename T>
@@ -168,6 +217,50 @@ typename vector<T>::iterator vector<T>::iterator::operator++(int)
 }
 
 
+// Const iterator
+
+
+template <typename T>
+vector<T>::const_iterator::const_iterator(const T* ptr) : m_ptr{ptr} {}
+
+
+// template <typename T>
+// vector<T>::const_iterator::const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {}
+
+
+template <typename T>
+const T& vector<T>::const_iterator::operator*() const
+{
+    return *m_ptr;
+}
+
+template <typename T>
+bool vector<T>::const_iterator::operator==(const vector<T>::const_iterator& other) const
+{
+    return (this->m_ptr == other.m_ptr);
+}
+
+template <typename T>
+bool vector<T>::const_iterator::operator!=(const vector<T>::const_iterator& other) const
+{
+    return (this->m_ptr != other.m_ptr);
+}
+
+
+template <typename T>
+typename vector<T>::const_iterator& vector<T>::const_iterator::operator++()
+{
+    ++m_ptr;
+    return *this;
+}
+
+template <typename T>
+typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int)
+{
+    const_iterator tmp = *this;
+    ++m_ptr;
+    return tmp;
+}
 
 
 // Constructors & Destructor
@@ -216,4 +309,5 @@ template <typename T>
 vector<T>::~vector()
 {
     delete[] m_arr;
+    m_arr = nullptr;
 }

@@ -4,17 +4,18 @@
 
 int main()
 {
-    std::vector<int> svec = {1, 2, 3, 4};
+    std::vector<int> svec = {5, 6, 7};
 
     juju::vector<int> vec = {1, 2, 3, 4};
 
     vec.push_back(21);
 
-    std::vector<int>::iterator it = svec.begin();
+    juju::vector<int>::const_iterator cit = vec.cbegin();
 
-    juju::vector<int>::iterator juj = vec.begin();
+    cit++;
 
-    ++juj;
-
-    std::cout << *(juj.m_ptr) << std::endl;
+    for(auto it : vec)
+    {
+        std::cout << it << std::endl;
+    }
 }

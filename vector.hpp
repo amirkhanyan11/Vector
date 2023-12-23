@@ -24,6 +24,7 @@ namespace juju
 
         vector<T>& operator=(const vector<T>& other);
         const T& operator[](const size_t) const;
+        vector<T>& operator+=(const vector<T> other);
 
 
     public:
@@ -45,29 +46,14 @@ namespace juju
 
         // Iterators
 
-        class iterator
-        {
-
-        public:
-
-            iterator() = delete;
-            iterator(T*);
-            iterator(const iterator& other) = default;
-            
-        public:
-
-            // friend std::ostream& operator<< (std::ostream&, const typename vector<T>::iterator&);
-            
-            iterator& operator++();
-            iterator operator++(int);
-
-        public:
-            T* m_ptr;
-        };
-
+        class iterator;
+        class const_iterator;
 
         iterator begin();
         iterator end();
+        const_iterator cbegin() const;
+        const_iterator cend() const;
+
 
     private:
 
@@ -76,6 +62,53 @@ namespace juju
         int* m_arr = nullptr;
 
         void _resize();
+    };
+
+
+
+
+    template <typename T>
+    class vector<T>::iterator
+    {
+
+    public:
+
+        friend class const_iterator;
+        iterator() = default;
+        iterator(T*);
+        iterator(const iterator& other) = default;
+        
+    public:
+
+        iterator& operator++();
+        iterator operator++(int);
+        T& operator*() const;
+        bool operator==(const iterator& other) const;
+        bool operator!=(const iterator& other) const;
+
+    private:
+        T* m_ptr = nullptr;
+    };
+
+
+
+    template <typename T>
+    class vector<T>::const_iterator
+    {
+
+    public:
+        const_iterator() = default;
+        const_iterator(const T*);
+        const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {};
+        const_iterator(const const_iterator& other) = default;
+        const_iterator& operator++();
+        const_iterator operator++(int);
+        const T& operator*() const;
+        bool operator==(const const_iterator& other) const;
+        bool operator!=(const const_iterator& other) const;
+        
+    private:
+        const T* m_ptr = nullptr;
     };
 
 }
