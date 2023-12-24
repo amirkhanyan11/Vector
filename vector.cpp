@@ -27,6 +27,12 @@ const T& vector<T>::at(const size_t index) const
     return m_arr[index];
 }
 
+template <typename T>
+T& vector<T>::at(const size_t index)
+{
+    return const_cast<T&>(static_cast<const vector<T>&>(*this).at(index));
+}
+
 
 // Overloaded operators
 
@@ -40,8 +46,8 @@ const T& vector<T>::operator[](const size_t index) const
 template <typename T>
 T& vector<T>::operator[](const size_t index)
 {
-    static_cast<const vector<T>&>(*this);
-    return const_cast<T&>(*this[index]);
+    
+    return const_cast<T&>(static_cast<const vector<T>&>(*this)[index]);
 }
 
 template <typename T>
@@ -158,34 +164,43 @@ T& vector<T>::back() const
 
 
 template <typename T>
-typename vector<T>::iterator vector<T>::begin()
+typename vector<T>::iterator vector<T>::begin() const noexcept
 {
     return vector<T>::iterator(m_arr);
 }
 
 template <typename T>
-typename vector<T>::iterator vector<T>::end()
+typename vector<T>::iterator vector<T>::end() const noexcept
 {
     return vector<T>::iterator(m_arr + m_size);
 }
 
 template <typename T>
-typename vector<T>::const_iterator vector<T>::cbegin() const
+typename vector<T>::const_iterator vector<T>::cbegin() const noexcept
 {
     return vector<T>::const_iterator(m_arr);
 }
 
 template <typename T>
-typename vector<T>::const_iterator vector<T>::cend() const
+typename vector<T>::const_iterator vector<T>::cend() const noexcept
 {
     return vector<T>::const_iterator(m_arr + m_size);
 }
 
 
 
+// Iterator Ctors
+
 template <typename T>
 vector<T>::iterator::iterator(T* ptr) : m_ptr{ptr} {};
 
+
+template <typename T>
+vector<T>::iterator::iterator(const vector<T>& vec)
+{
+    this->m_ptr = vec.begin().m_ptr;
+
+}
 
 
 template <typename T>
@@ -209,19 +224,35 @@ bool vector<T>::iterator::operator!=(const vector<T>::iterator& other) const
 
 
 template <typename T>
-typename vector<T>::iterator& vector<T>::iterator::operator++()
+typename vector<T>::iterator& vector<T>::iterator::operator++() noexcept
 {
     ++m_ptr;
     return *this;
 }
 
 template <typename T>
-typename vector<T>::iterator vector<T>::iterator::operator++(int)
+typename vector<T>::iterator vector<T>::iterator::operator++(int) noexcept
 {
     iterator tmp = *this;
     ++m_ptr;
     return tmp;
 }
+
+template <typename T>
+typename vector<T>::iterator& vector<T>::iterator::operator--() noexcept
+{
+    --m_ptr;
+    return *this;
+}
+
+template <typename T>
+typename vector<T>::iterator vector<T>::iterator::operator--(int) noexcept
+{
+    iterator tmp = *this;
+    --m_ptr;
+    return tmp;
+}
+
 
 
 // Const iterator
@@ -233,6 +264,14 @@ vector<T>::const_iterator::const_iterator(const T* ptr) : m_ptr{ptr} {}
 
 // template <typename T>
 // vector<T>::const_iterator::const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {}
+
+
+template <typename T>
+typename vector<T>::const_iterator& vector<T>::const_iterator::operator=(const iterator& other)
+{
+    this->m_ptr = other.m_ptr;
+    return *this;
+}
 
 
 template <typename T>
@@ -255,17 +294,33 @@ bool vector<T>::const_iterator::operator!=(const vector<T>::const_iterator& othe
 
 
 template <typename T>
-typename vector<T>::const_iterator& vector<T>::const_iterator::operator++()
+typename vector<T>::const_iterator& vector<T>::const_iterator::operator++() noexcept
 {
     ++m_ptr;
     return *this;
 }
 
 template <typename T>
-typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int)
+typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int) noexcept
 {
     const_iterator tmp = *this;
     ++m_ptr;
+    return tmp;
+}
+
+
+template <typename T>
+typename vector<T>::const_iterator& vector<T>::const_iterator::operator--() noexcept
+{
+    --m_ptr;
+    return *this;
+}
+
+template <typename T>
+typename vector<T>::const_iterator vector<T>::const_iterator::operator--(int) noexcept
+{
+    const_iterator tmp = *this;
+    --m_ptr;
     return tmp;
 }
 

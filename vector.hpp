@@ -24,14 +24,17 @@ namespace juju
 
         vector<T>& operator=(const vector<T>& other);
         const T& operator[](const size_t) const;
+        T& operator[](const size_t);
         vector<T>& operator+=(const vector<T> other);
 
 
     public:
 
+        const T& at(const size_t) const;
+        T& at(const size_t);
+
         size_t size() const;
         size_t capacity() const;
-        const T& at(const size_t) const;
         void push_back(const T);
         void shrink_to_fit();
         bool empty() const;
@@ -49,10 +52,10 @@ namespace juju
         class iterator;
         class const_iterator;
 
-        iterator begin();
-        iterator end();
-        const_iterator cbegin() const;
-        const_iterator cend() const;
+        iterator begin() const noexcept;
+        iterator end() const noexcept;
+        const_iterator cbegin() const noexcept;
+        const_iterator cend() const noexcept;
 
 
     private:
@@ -76,12 +79,15 @@ namespace juju
         friend class const_iterator;
         iterator() = default;
         iterator(T*);
-        iterator(const iterator& other) = default;
+        iterator(const iterator&) = default;
+        iterator(const vector<T>&);
         
     public:
 
-        iterator& operator++();
-        iterator operator++(int);
+        iterator& operator++() noexcept;
+        iterator operator++(int) noexcept;
+        iterator& operator--() noexcept;
+        iterator operator--(int) noexcept;
         T& operator*() const;
         bool operator==(const iterator& other) const;
         bool operator!=(const iterator& other) const;
@@ -101,8 +107,11 @@ namespace juju
         const_iterator(const T*);
         const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {};
         const_iterator(const const_iterator& other) = default;
-        const_iterator& operator++();
-        const_iterator operator++(int);
+        const_iterator& operator++() noexcept;
+        const_iterator operator++(int) noexcept;
+        const_iterator& operator--() noexcept;
+        const_iterator operator--(int) noexcept;
+        const_iterator& operator=(const iterator& other);
         const T& operator*() const;
         bool operator==(const const_iterator& other) const;
         bool operator!=(const const_iterator& other) const;

@@ -8,7 +8,6 @@ int main()
 
     juju::vector<int> vec = {1, 2, 3, 4};
 
-    vec.push_back(21);
 
     juju::vector<int>::const_iterator cit = vec.cbegin();
 
