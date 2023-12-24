@@ -38,6 +38,13 @@ const T& vector<T>::operator[](const size_t index) const
 }
 
 template <typename T>
+T& vector<T>::operator[](const size_t index)
+{
+    static_cast<const vector<T>&>(*this);
+    return const_cast<T&>(*this[index]);
+}
+
+template <typename T>
 vector<T>& vector<T>::operator=(const vector<T>& other)
 {
     if (this == &other)
