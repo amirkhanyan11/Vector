@@ -1,7 +1,7 @@
 #include "vector.hpp"
 using namespace juju;
 
-template class vector<int>;
+//template class vector<int>;
 
 
 template <typename T>
@@ -43,12 +43,14 @@ const T& vector<T>::operator[](const size_t index) const
     return this->at(index);
 }
 
+
+
 template <typename T>
 T& vector<T>::operator[](const size_t index)
 {
-    
     return const_cast<T&>(static_cast<const vector<T>&>(*this)[index]);
 }
+
 
 template <typename T>
 vector<T>& vector<T>::operator=(const vector<T>& other)
@@ -191,62 +193,54 @@ typename vector<T>::const_iterator vector<T>::cend() const noexcept
 
 // Iterator Ctors
 
-template <typename T>
-vector<T>::iterator::iterator(T* ptr) : m_ptr{ptr} {};
+template <typename vector>
+vector_iterator<vector>::vector_iterator(pointerType ptr) : m_ptr{ptr} {}
 
 
-template <typename T>
-vector<T>::iterator::iterator(const vector<T>& vec)
-{
-    this->m_ptr = vec.begin().m_ptr;
-
-}
-
-
-template <typename T>
-T& vector<T>::iterator::operator*() const
+template <typename vector>
+vector_iterator<vector>::referenceType vector_iterator<vector>::operator*() const
 {
     return *m_ptr;
 }
 
-template <typename T>
-bool vector<T>::iterator::operator==(const vector<T>::iterator& other) const
+template <typename vector>
+bool vector_iterator<vector>::operator==(const vector_iterator& other) const
 {
     return (this->m_ptr == other.m_ptr);
 }
 
-template <typename T>
-bool vector<T>::iterator::operator!=(const vector<T>::iterator& other) const
+template <typename vector>
+bool vector_iterator<vector>::operator!=(const vector_iterator& other) const
 {
     return (this->m_ptr != other.m_ptr);
 }
 
 
 
-template <typename T>
-typename vector<T>::iterator& vector<T>::iterator::operator++() noexcept
+template <typename vector>
+vector_iterator<vector>& vector_iterator<vector>::operator++() noexcept
 {
     ++m_ptr;
     return *this;
 }
 
-template <typename T>
-typename vector<T>::iterator vector<T>::iterator::operator++(int) noexcept
+template <typename vector>
+vector_iterator<vector> vector_iterator<vector>::operator++(int) noexcept
 {
     iterator tmp = *this;
     ++m_ptr;
     return tmp;
 }
 
-template <typename T>
-typename vector<T>::iterator& vector<T>::iterator::operator--() noexcept
+template <typename vector>
+vector_iterator<vector>& vector_iterator<vector>::operator--() noexcept
 {
     --m_ptr;
     return *this;
 }
 
-template <typename T>
-typename vector<T>::iterator vector<T>::iterator::operator--(int) noexcept
+template <typename vector>
+vector_iterator<vector> vector_iterator<vector>::operator--(int) noexcept
 {
     iterator tmp = *this;
     --m_ptr;
@@ -258,50 +252,57 @@ typename vector<T>::iterator vector<T>::iterator::operator--(int) noexcept
 // Const iterator
 
 
-template <typename T>
-vector<T>::const_iterator::const_iterator(const T* ptr) : m_ptr{ptr} {}
+template <typename vector>
+const_vector_iterator<vector>::const_vector_iterator(const pointerType ptr) : m_ptr{ptr} {}
 
 
-// template <typename T>
+// template <typename vector>
 // vector<T>::const_iterator::const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {}
 
 
-template <typename T>
-typename vector<T>::const_iterator& vector<T>::const_iterator::operator=(const iterator& other)
+template <typename vector>
+const_vector_iterator<vector>& const_vector_iterator<vector>::operator=(const vector_iterator<vector>& other)
+{
+    this->m_ptr = other.m_ptr;
+    return *this;
+}
+
+template <typename vector>
+const_vector_iterator<vector>& const_vector_iterator<vector>::operator=(const const_vector_iterator<vector>& other)
 {
     this->m_ptr = other.m_ptr;
     return *this;
 }
 
 
-template <typename T>
-const T& vector<T>::const_iterator::operator*() const
+template <typename vector>
+const const_vector_iterator<vector>::referenceType const_vector_iterator<vector>::operator*() const
 {
     return *m_ptr;
 }
 
-template <typename T>
-bool vector<T>::const_iterator::operator==(const vector<T>::const_iterator& other) const
+template <typename vector>
+bool const_vector_iterator<vector>::operator==(const const_vector_iterator& other) const
 {
     return (this->m_ptr == other.m_ptr);
 }
 
-template <typename T>
-bool vector<T>::const_iterator::operator!=(const vector<T>::const_iterator& other) const
+template <typename vector>
+bool const_vector_iterator<vector>::operator!=(const const_vector_iterator& other) const
 {
     return (this->m_ptr != other.m_ptr);
 }
 
 
-template <typename T>
-typename vector<T>::const_iterator& vector<T>::const_iterator::operator++() noexcept
+template <typename vector>
+const_vector_iterator<vector>& const_vector_iterator<vector>::operator++() noexcept
 {
     ++m_ptr;
     return *this;
 }
 
-template <typename T>
-typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int) noexcept
+template <typename vector>
+const_vector_iterator<vector> const_vector_iterator<vector>::operator++(int) noexcept
 {
     const_iterator tmp = *this;
     ++m_ptr;
@@ -309,15 +310,15 @@ typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int) no
 }
 
 
-template <typename T>
-typename vector<T>::const_iterator& vector<T>::const_iterator::operator--() noexcept
+template <typename vector>
+const_vector_iterator<vector>& const_vector_iterator<vector>::operator--() noexcept
 {
     --m_ptr;
     return *this;
 }
 
-template <typename T>
-typename vector<T>::const_iterator vector<T>::const_iterator::operator--(int) noexcept
+template <typename vector>
+const_vector_iterator<vector> const_vector_iterator<vector>::operator--(int) noexcept
 {
     const_iterator tmp = *this;
     --m_ptr;

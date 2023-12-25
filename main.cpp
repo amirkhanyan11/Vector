@@ -2,6 +2,8 @@
 #include "vector.hpp"
 #include <vector>
 
+
+
 int main()
 {
     std::vector<int> svec = {5, 6, 7};
@@ -13,8 +15,8 @@ int main()
 
     cit++;
 
-    for(auto it : vec)
+    for(juju::vector<int>::iterator it : vec)
     {
-        std::cout << it << std::endl;
+        // std::cout << it << std::endl;
     }
 }

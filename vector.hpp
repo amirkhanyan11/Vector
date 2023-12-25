@@ -5,9 +5,83 @@
 namespace juju
 {
 
+    // Iterator
+    template <class vector>
+    class vector_iterator
+    {
+
+    public:
+
+        using valueType = class vector::valueType;
+        using pointerType = valueType*;
+        using referenceType = valueType&;
+
+    public:
+
+        friend class const_vector_iterator;
+        vector_iterator() = default;
+        vector_iterator(pointerType);
+        vector_iterator(const vector_iterator&) = default;
+                
+    public:
+
+        vector_iterator& operator++() noexcept;
+        vector_iterator operator++(int) noexcept;
+        vector_iterator& operator--() noexcept;
+        vector_iterator operator--(int) noexcept;
+        referenceType operator*() const;
+        bool operator==(const vector_iterator& other) const;
+        bool operator!=(const vector_iterator& other) const;
+
+    private:
+        pointerType m_ptr = nullptr;
+    };
+
+
+
+    // Const Iterator
+    template <class vector>
+    class const_vector_iterator
+    {
+
+    public:
+
+        using valueType = class vector::valueType;
+        using pointerType = valueType*;
+        using referenceType = valueType&;
+
+    public:
+        const_vector_iterator() = default;
+        const_vector_iterator(const pointerType);
+        const_vector_iterator(const vector_iterator& other) : m_ptr{other.m_ptr} {};
+        const_vector_iterator(const const_vector_iterator& other) = default;
+        const_vector_iterator& operator++() noexcept;
+        const_vector_iterator operator++(int) noexcept;
+        const_vector_iterator& operator--() noexcept;
+        const_vector_iterator operator--(int) noexcept;
+        const_vector_iterator& operator=(const const_vector_iterator<vector>& other);
+        const_vector_iterator& operator=(const vector_iterator<vector>& other);
+        const referenceType operator*() const;
+        bool operator==(const const_vector_iterator& other) const;
+        bool operator!=(const const_vector_iterator& other) const;
+        
+    private:
+        const T* m_ptr = nullptr;
+    };
+
+
+
+    // Vector
     template <typename T>
     class vector
     {
+
+
+    public:
+
+        using valueType = T;
+        using iterator = vector_iterator<vector<T>>;
+        using const_iterator = const_vector_iterator<vector<T>>;
 
     public:
 
@@ -49,8 +123,8 @@ namespace juju
 
         // Iterators
 
-        class iterator;
-        class const_iterator;
+        //class iterator;
+        //class const_iterator;
 
         iterator begin() const noexcept;
         iterator end() const noexcept;
@@ -70,55 +144,55 @@ namespace juju
 
 
 
-    template <typename T>
-    class vector<T>::iterator
-    {
+    // template <typename T>
+    // class vector<T>::iterator
+    // {
 
-    public:
+    // public:
 
-        friend class const_iterator;
-        iterator() = default;
-        iterator(T*);
-        iterator(const iterator&) = default;
-        iterator(const vector<T>&);
+    //     friend class const_iterator;
+    //     iterator() = default;
+    //     iterator(T*);
+    //     iterator(const iterator&) = default;
+    //     iterator(const vector<T>&);
         
-    public:
+    // public:
 
-        iterator& operator++() noexcept;
-        iterator operator++(int) noexcept;
-        iterator& operator--() noexcept;
-        iterator operator--(int) noexcept;
-        T& operator*() const;
-        bool operator==(const iterator& other) const;
-        bool operator!=(const iterator& other) const;
+    //     iterator& operator++() noexcept;
+    //     iterator operator++(int) noexcept;
+    //     iterator& operator--() noexcept;
+    //     iterator operator--(int) noexcept;
+    //     T& operator*() const;
+    //     bool operator==(const iterator& other) const;
+    //     bool operator!=(const iterator& other) const;
 
-    private:
-        T* m_ptr = nullptr;
-    };
+    // private:
+    //     T* m_ptr = nullptr;
+    // };
 
 
 
-    template <typename T>
-    class vector<T>::const_iterator
-    {
+    // template <typename T>
+    // class vector<T>::const_iterator
+    // {
 
-    public:
-        const_iterator() = default;
-        const_iterator(const T*);
-        const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {};
-        const_iterator(const const_iterator& other) = default;
-        const_iterator& operator++() noexcept;
-        const_iterator operator++(int) noexcept;
-        const_iterator& operator--() noexcept;
-        const_iterator operator--(int) noexcept;
-        const_iterator& operator=(const iterator& other);
-        const T& operator*() const;
-        bool operator==(const const_iterator& other) const;
-        bool operator!=(const const_iterator& other) const;
+    // public:
+    //     const_iterator() = default;
+    //     const_iterator(const T*);
+    //     const_iterator(const vector<T>::iterator& other) : m_ptr{other.m_ptr} {};
+    //     const_iterator(const const_iterator& other) = default;
+    //     const_iterator& operator++() noexcept;
+    //     const_iterator operator++(int) noexcept;
+    //     const_iterator& operator--() noexcept;
+    //     const_iterator operator--(int) noexcept;
+    //     const_iterator& operator=(const iterator& other);
+    //     const T& operator*() const;
+    //     bool operator==(const const_iterator& other) const;
+    //     bool operator!=(const const_iterator& other) const;
         
-    private:
-        const T* m_ptr = nullptr;
-    };
+    // private:
+    //     const T* m_ptr = nullptr;
+    // };
 
 }
 
