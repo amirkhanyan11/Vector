@@ -1,5 +1,5 @@
 G++ = g++
-FILES = main.cpp vector_object_file.o
+FILES = main.cpp
 EXE = Vector
 DEL = rm
 
