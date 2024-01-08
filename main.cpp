@@ -8,7 +8,7 @@ int main()
 {
     juju::vector<int> vec = {1, 2, 3};
 
-    juju::vector<int>::iterator i = vec.begin();
+    //juju::vector<int>::iterator i = vec.begin();
 
 
     for (auto i : vec)
