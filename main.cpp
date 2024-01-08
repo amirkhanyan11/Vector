@@ -11,7 +11,7 @@ int main()
     juju::vector<int>::iterator i = vec.begin();
 
 
-    for (int i : vec)
+    for (auto i : vec)
     {
         std::cout << i << std::endl;
     }
